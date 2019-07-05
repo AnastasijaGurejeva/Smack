@@ -12,10 +12,50 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Please log in!"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            android:id="@+id/channel_name_main"/>
+
+    <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:gravity="start|top"
+            android:ems="10"
+            android:id="@+id/newMessageField"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:hint="message:"/>
+
+    <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:srcCompat="@drawable/ic_menu_send"
+            android:id="@+id/sendBtn"
+            android:onClick="onSendMessageClicked"
+            app:layout_constraintEnd_toEndOf="@+id/newMessageField"
+            android:tint="@color/colorPrimary"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/newMessageField"
+            app:layout_constraintTop_toTopOf="@+id/newMessageField"/>
+
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="395dp"
+            android:layout_height="579dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/channel_name_main"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/newMessageField"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
+            android:id="@+id/meesageListView"/>
 
 </android.support.constraint.ConstraintLayout>
