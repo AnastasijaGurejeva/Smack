@@ -1,11 +1,12 @@
-package com.example.smack
+package com.example.smack.Controller
 
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.smack.R
+import com.example.smack.Services.AuthService
 import kotlinx.android.synthetic.main.activity_create_user.*
-import kotlin.random.Random
 
 class CreateUserActivity : AppCompatActivity() {
     var userAvatar = "profileDefault"
@@ -24,7 +25,7 @@ class CreateUserActivity : AppCompatActivity() {
         if (color == 0) {
             userAvatar = "light$avatar"
         } else {
-            userAvatar ="dark$avatar"
+            userAvatar = "dark$avatar"
         }
         val resourceId = resources.getIdentifier(userAvatar, "drawable", this.packageName)
         userAvatarSignUp.setImageResource(resourceId)
@@ -47,7 +48,12 @@ class CreateUserActivity : AppCompatActivity() {
     }
 
     fun onCreateUserClicked(view: View) {
+        AuthService.registerUser(this, "jbc@j.com", "123456") { complete ->
+            if (complete) {
+
+            }
+
+        }
 
     }
-
 }
