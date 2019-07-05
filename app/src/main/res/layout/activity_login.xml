@@ -18,8 +18,9 @@
             android:layout_marginStart="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="40dp"
-            android:layout_marginTop="38dp"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@android:color/darker_gray"/>
 
     <EditText
             android:layout_width="0dp"
@@ -31,7 +32,8 @@
             app:layout_constraintStart_toStartOf="@+id/emailLoginField"
             app:layout_constraintEnd_toEndOf="@+id/emailLoginField"
             android:hint="password"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:textColor="@android:color/darker_gray"/>
 
     <Button
             android:text="Login"
