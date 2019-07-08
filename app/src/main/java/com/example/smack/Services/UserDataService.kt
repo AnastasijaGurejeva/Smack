@@ -1,6 +1,7 @@
 package com.example.smack.Services
 
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -9,9 +10,11 @@ import com.example.smack.Services.AuthService.authToken
 import com.example.smack.Utilities.URL_ADD_USER
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.HashMap
 
 object UserDataService {
-    var id = ""
+    var userId = ""
     var avatarColor = ""
     var avatarName = ""
     var email = ""
@@ -34,10 +37,10 @@ object UserDataService {
                     UserDataService.email = response.getString("email")
                     UserDataService.avatarName =  response.getString("avatarName")
                     UserDataService.avatarColor = response.getString("avatarColor")
-                    UserDataService.id = response.getString("_id")
+                    UserDataService.userId = response.getString("_id")
                     complete(true)
                 } catch(e: JSONException) {
-                    Log.d("JSON", "EXC "+e.localizedMessage)
+                    Log.d("JSON", "EXC "+ e.localizedMessage)
                 }
 
         }, Response.ErrorListener {error ->
@@ -58,10 +61,36 @@ object UserDataService {
                 headers.put("Authorization", "Bearer $authToken")
                 return headers
             }
-
         }
         Volley.newRequestQueue(context).add(addUserRequest)
 
+    }
+
+    fun returnAvatarColor(components: String) : Int {
+        val strippedColor = components
+            .replace("[", "")
+            .replace("]", "")
+            .replace(",", "")
+        var r = 0
+        var g = 0
+        var b = 0
+        val scanner = Scanner(strippedColor)
+        if(scanner.hasNext()) {
+            r = (scanner.nextDouble()* 255).toInt()
+            g = (scanner.nextDouble()* 255).toInt()
+            b = (scanner.nextDouble()* 255).toInt()
+        }
+        return Color.rgb(r, g, b)
+    }
+
+    fun logout() {
+        userId = ""
+        avatarColor = ""
+        avatarName = ""
+        email = ""
+        AuthService.authToken = ""
+        AuthService.userEmail = ""
+        AuthService.isLoggedIn = false
     }
 
 
