@@ -1,15 +1,21 @@
 package com.example.smack.Services
 
 import android.content.Context
+import android.content.Intent
+import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.smack.Services.UserDataService.email
+import com.example.smack.Utilities.BROADCAST_USER_DATA_CHANGES
+import com.example.smack.Utilities.URL_FIND_USER
 import com.example.smack.Utilities.URL_LOGIN
 import com.example.smack.Utilities.URL_REGISTER
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.HashMap
 
 object AuthService {
     var isLoggedIn = false
@@ -35,6 +41,7 @@ object AuthService {
             override fun getBodyContentType(): String {
                 return "application/json; charset=utf-8"
             }
+
             override fun getBody(): ByteArray {
                 return requestBody.toByteArray()
             }
@@ -52,18 +59,18 @@ object AuthService {
 
         val loginRequest = object : JsonObjectRequest(Method.POST, URL_LOGIN, null,
             Response.Listener { response ->
-               try {
-                   userEmail = response.getString("user")
-                   authToken = response.getString("token")
-                   isLoggedIn = true
-                   complete(true)
-               } catch(e: JSONException) {
-                   Log.d("JSON", "EXC:" + e.localizedMessage)
-                   complete(false)
-               }
+                try {
+                    userEmail = response.getString("user")
+                    authToken = response.getString("token")
+                    isLoggedIn = true
+                    complete(true)
+                } catch (e: JSONException) {
+                    Log.d("JSON", "EXC:" + e.localizedMessage)
+                    complete(false)
+                }
 
             }, Response.ErrorListener { error ->
-                Log.d("ERROR", "Couldn't register user: $error")
+                Log.d("ERROR", "Couldn't login user: $error")
                 complete(false)
             }) {
 
@@ -74,8 +81,51 @@ object AuthService {
             override fun getBody(): ByteArray {
                 return requestBody.toByteArray()
             }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers.put("Authorization", "Bearer $authToken")
+                return headers
+            }
         }
 
         Volley.newRequestQueue(context).add(loginRequest)
     }
+
+    fun findUserByEmail(context: Context, complete: (Boolean) -> Unit) {
+        val findUserRequest = object : JsonObjectRequest(Method.GET, "$URL_FIND_USER$userEmail", null,
+            Response.Listener { response ->
+                try {
+                    UserDataService.name = response.getString("name")
+                    UserDataService.email = response.getString("email")
+                    UserDataService.avatarName = response.getString("avatarName")
+                    UserDataService.avatarColor = response.getString("avatarColor")
+                    UserDataService.userId = response.getString("_id")
+
+                    val userDataChanged = Intent(BROADCAST_USER_DATA_CHANGES)
+                    LocalBroadcastManager.getInstance(context).sendBroadcast(userDataChanged)
+                    complete(true)
+
+
+                } catch (e: JSONException) {
+                    Log.d("JSON", "EXP: " + e.localizedMessage)
+                }
+            }, Response.ErrorListener { error ->
+                Log.d("ERROR", "Couldn't find user: $error")
+                complete(false)
+            }) {
+
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers.put("Authorization", "Bearer $authToken")
+                return headers
+            }
+        }
+        Volley.newRequestQueue(context).add(findUserRequest)
+    }
+
 }
