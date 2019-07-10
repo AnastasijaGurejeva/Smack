@@ -39,7 +39,7 @@
             android:text="Login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/onLoginBtnLoginPage"
+            android:id="@+id/btnLoginLoginPage"
             app:layout_constraintStart_toStartOf="@+id/passwordLoginField"
             app:layout_constraintEnd_toEndOf="@+id/passwordLoginField"
             android:layout_marginTop="8dp"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txt"
             android:layout_marginTop="80dp"
-            app:layout_constraintTop_toBottomOf="@+id/onLoginBtnLoginPage"
+            app:layout_constraintTop_toBottomOf="@+id/btnLoginLoginPage"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +65,7 @@
             android:text="Sing up here"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/button2"
+            android:id="@+id/btnSignUpLogin"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="40dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,4 +76,18 @@
             android:background="@color/colorPrimary"
             android:textColor="@android:color/white"
             android:textSize="16sp"/>
+
+    <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/loginSpinner"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/txt"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/btnLoginLoginPage"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
 </android.support.constraint.ConstraintLayout>
