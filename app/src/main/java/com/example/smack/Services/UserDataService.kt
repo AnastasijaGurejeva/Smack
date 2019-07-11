@@ -20,7 +20,7 @@ object UserDataService {
     var email = ""
     var name = ""
 
-    fun addUser(context: Context, name: String, email: String, avatarName: String,
+    fun addUser(name: String, email: String, avatarName: String,
                 avatarColor: String, complete: (Boolean) -> Unit) {
 
         val jsonBody = JSONObject()

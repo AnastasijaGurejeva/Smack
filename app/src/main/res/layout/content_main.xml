@@ -17,7 +17,9 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp"
-            android:id="@+id/channel_name_main"/>
+            android:id="@+id/channel_name_main"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
     <EditText
             android:layout_width="0dp"
