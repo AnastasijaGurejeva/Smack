@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import com.example.smack.Model.Channel
 import com.example.smack.R
@@ -22,12 +23,19 @@ import com.example.smack.Utilities.BROADCAST_USER_DATA_CHANGES
 import com.example.smack.Utilities.SOCKET_URL
 import io.socket.client.IO
 import io.socket.emitter.Emitter
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     val socket = IO.socket(SOCKET_URL)
+    lateinit var channelAdapter: ArrayAdapter<Channel>
+
+    private fun setupAdapters() {
+        channelAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, MessageService.channels)
+        channel_list.adapter = channelAdapter
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,9 +53,14 @@ class MainActivity : AppCompatActivity() {
         )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+        setupAdapters()
 
         socket.connect()
         socket.on("channelCreated", onNewChannel)
+
+        if (App.prefs.isLoggedIn) {
+            AuthService.findUserByEmail(this) {}
+        }
     }
 
     override fun onResume() {
@@ -67,9 +80,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val userDataChangeReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            println(AuthService.isLoggedIn)
-            if (AuthService.isLoggedIn) {
+        override fun onReceive(context: Context, intent: Intent?) {
+            println(App.prefs.isLoggedIn)
+            if (App.prefs.isLoggedIn) {
                 userNameNavHeader.text = UserDataService.name
                 println(UserDataService.name)
                 user_email_nav_header.text = UserDataService.email
@@ -77,6 +90,12 @@ class MainActivity : AppCompatActivity() {
                 userImageNavHeader.setImageResource(resourceId)
                 userImageNavHeader.setBackgroundColor(UserDataService.returnAvatarColor(UserDataService.avatarColor))
                 btn_login_nav_header.text = "Logout"
+
+                MessageService.getCahnnels(context) { complete ->
+                    if (complete) {
+                        channelAdapter.notifyDataSetChanged()
+                    }
+                }
 
             }
         }
@@ -92,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onAddChannelClicked(view: View) {
-        if (AuthService.isLoggedIn) {
+        if (App.prefs.isLoggedIn) {
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.add_channel_dialog, null)
 
@@ -121,11 +140,12 @@ class MainActivity : AppCompatActivity() {
 
             val newChannel = Channel(channelName, channelDescription, channelId)
             MessageService.channels.add(newChannel)
+            channelAdapter.notifyDataSetChanged()
         }
     }
 
     fun onLoginClicked(view: View) {
-        if (AuthService.isLoggedIn) {
+        if (App.prefs.isLoggedIn) {
             //log out
             UserDataService.logout()
             userNameNavHeader.text = ""

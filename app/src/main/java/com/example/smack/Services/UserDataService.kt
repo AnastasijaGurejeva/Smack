@@ -6,7 +6,7 @@ import android.util.Log
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.example.smack.Services.AuthService.authToken
+import com.example.smack.Controller.App
 import com.example.smack.Utilities.URL_ADD_USER
 import org.json.JSONException
 import org.json.JSONObject
@@ -58,11 +58,11 @@ object UserDataService {
 
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-                headers.put("Authorization", "Bearer $authToken")
+                headers.put("Authorization", "Bearer ${App.prefs.authToken}")
                 return headers
             }
         }
-        Volley.newRequestQueue(context).add(addUserRequest)
+        App.prefs.requestQueue.add(addUserRequest)
 
     }
 
@@ -88,9 +88,9 @@ object UserDataService {
         avatarColor = ""
         avatarName = ""
         email = ""
-        AuthService.authToken = ""
-        AuthService.userEmail = ""
-        AuthService.isLoggedIn = false
+        App.prefs.authToken = ""
+        App.prefs.userEmail = ""
+        App.prefs.isLoggedIn = false
     }
 
 
