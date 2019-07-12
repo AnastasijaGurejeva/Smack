@@ -84,6 +84,8 @@ object UserDataService {
     }
 
     fun logout() {
+        MessageService.clearMessages()
+        MessageService.clearChannels()
         userId = ""
         avatarColor = ""
         avatarName = ""
