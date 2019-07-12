@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import com.example.smack.Model.Channel
+import com.example.smack.Model.Message
 import com.example.smack.R
 import com.example.smack.Services.AuthService
 import com.example.smack.Services.MessageService
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         socket.connect()
         socket.on("channelCreated", onNewChannel)
+        socket.on("messageCreated", onNewMessage)
 
         channel_list.setOnItemClickListener { _, _, position, _ ->
             selectedChannel = MessageService.channels[position]
@@ -76,7 +78,6 @@ class MainActivity : AppCompatActivity() {
             userDataChangeReceiver,
             IntentFilter(BROADCAST_USER_DATA_CHANGES)
         )
-
         super.onResume()
     }
 
@@ -160,6 +161,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private val onNewMessage = Emitter.Listener { args ->
+        runOnUiThread {
+            val messageBody = args[0] as String
+            val channelId = args[2] as String
+            val userName = args[3] as String
+            val userAvatar = args[4] as String
+            val userAvatarColor = args[5] as String
+            val id = args[6] as String
+            val timeStamp = args[7] as String
+
+            val newMessage = Message(messageBody, userName, channelId,
+                userAvatar, userAvatarColor, id, timeStamp)
+            MessageService.messages.add(newMessage)
+
+        }
+    }
+
     fun onLoginClicked(view: View) {
         if (App.prefs.isLoggedIn) {
             //log out
@@ -177,7 +195,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onSendMessageClicked(view: View) {
-        hideKeyboard()
+        if(App.prefs.isLoggedIn && newMessageField.text.isNotEmpty() && selectedChannel != null) {
+            val userId = UserDataService.userId
+            val channelId = selectedChannel!!.id
+            socket.emit("newMessage", newMessageField.text.toString(), userId, channelId,
+                UserDataService.name, UserDataService.avatarName, UserDataService.avatarColor)
+            newMessageField.text.clear()
+            hideKeyboard()
+        }
 
     }
 
