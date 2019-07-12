@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            tools:srcCompat="@drawable/dark1"
+            android:id="@+id/messageUserImage"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/messageUserNameLable"
+            tools:text="AnaG"
+            app:layout_constraintStart_toEndOf="@+id/messageUserImage"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@+id/messageUserImage"/>
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeStampLable"
+            tools:text="Mar 11. 10:30"
+            app:layout_constraintStart_toEndOf="@+id/messageUserNameLable"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@+id/messageUserNameLable"/>
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/messageBodyLable"
+            tools:text="Growing up, Arielle Kandel was surrounded by immigration stories.    She heard about her grandparents' harrowing journey from Germany, Poland, France, to finally the United States—the only country to grant them a visa right before WWII. "
+            app:layout_constraintStart_toEndOf="@+id/messageUserImage"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/timeStampLable"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="8dp"/>
+</android.support.constraint.ConstraintLayout>

@@ -1,6 +1,5 @@
 package com.example.smack.Services
 
-import android.content.Context
 import android.util.Log
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
@@ -17,28 +16,28 @@ object MessageService {
     val channels = ArrayList<Channel>()
     val messages = ArrayList<Message>()
 
-    fun getCahnnels(complete: (Boolean) -> Unit) {
+    fun getChannels(complete: (Boolean) -> Unit) {
 
-        val channelsRequest = object: JsonArrayRequest(Method.GET, URL_GET_CHANNELS, null ,
+        val channelsRequest = object : JsonArrayRequest(Method.GET, URL_GET_CHANNELS, null,
             Response.Listener { response ->
                 try {
-                        for (i in 0 until response.length()) {
-                          val channel = response.getJSONObject(i)
-                            val name = channel.getString("name")
-                            val chanDesc  = channel.getString("description")
-                            val chanId = channel.getString("_id")
+                    for (i in 0 until response.length()) {
+                        val channel = response.getJSONObject(i)
+                        val name = channel.getString("name")
+                        val chanDesc = channel.getString("description")
+                        val chanId = channel.getString("_id")
 
-                            val newChannel = Channel(name, chanDesc, chanId)
-                            this.channels.add(newChannel)
-                            complete(true)
-                        }
+                        val newChannel = Channel(name, chanDesc, chanId)
+                        this.channels.add(newChannel)
+                        complete(true)
+                    }
 
-                } catch(e: JSONException) {
+                } catch (e: JSONException) {
                     Log.d("JSON", "Exc: " + e.localizedMessage)
                     complete(false)
                 }
 
-        }, Response.ErrorListener { error ->
+            }, Response.ErrorListener { error ->
                 Log.d("ERROR", "Couldn't retrieve channels")
                 complete(false)
 
@@ -59,25 +58,28 @@ object MessageService {
     fun getMessages(channelId: String, complete: (Boolean) -> Unit) {
         val url = "$URL_GET_MESSAGES$channelId"
 
-        val messagesRequest = object: JsonArrayRequest(Method.GET, url, null,
+        val messagesRequest = object : JsonArrayRequest(Method.GET, url, null,
             Response.Listener { response ->
+                clearMessages()
                 try {
-                    for( i in 0 until response.length()) {
+                    for (i in 0 until response.length()) {
                         val message = response.getJSONObject(i)
-                        val messageBody  = message.getString("messageBody")
-                        val channelId  = message.getString("channelId")
-                        val id  = message.getString("_id")
-                        val userNamed  = message.getString("userName")
-                        val userAvatar  = message.getString("userAvatar")
-                        val userAvatarColor  = message.getString("userAvatarColor")
-                        val timeStamp  = message.getString("timeStamp")
+                        val messageBody = message.getString("messageBody")
+                        val channelID = message.getString("channelId")
+                        val id = message.getString("_id")
+                        val userName = message.getString("userName")
+                        val userAvatar = message.getString("userAvatar")
+                        val userAvatarColor = message.getString("userAvatarColor")
+                        val timeStamp = message.getString("timeStamp")
 
-                        val newMessage = Message(messageBody, userAvatar, channelId, userAvatar,
-                            userAvatarColor, id, timeStamp)
+                        val newMessage = Message(
+                            messageBody, userName, channelID, userAvatar,
+                            userAvatarColor, id, timeStamp
+                        )
                         this.messages.add(newMessage)
                     }
                     complete(true)
-                } catch(e: JSONException) {
+                } catch (e: JSONException) {
                     Log.d("JSON", "Exc: " + e.localizedMessage)
                     complete(false)
                 }
